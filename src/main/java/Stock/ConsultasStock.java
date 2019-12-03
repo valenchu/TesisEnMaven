@@ -12,9 +12,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 import static java.util.logging.Level.SEVERE;
+import java.util.logging.Logger;
 import static java.util.logging.Logger.getLogger;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -32,7 +35,7 @@ public class ConsultasStock {
 
     //Busqueda de stock para llenar tabla
     public void buscarStock(String fil, String val, JTable b, int[] limitador) {
-        JComboBox o = new JComboBox();
+     
         int id = -1;
         try {
             //Cantidad de columnas mas encabezado
@@ -62,13 +65,23 @@ public class ConsultasStock {
                             + " LIMIT " + limitador[0] + "," + limitador[1] + "";
                     out.println("entre en idproducto");
                     break;
+                case "PrecioSIVA":
+                    SSQL = "SELECT IDProducto, Descripcio, PrecioSinIVA, PrecioConIVA, Cantidad, Oferta, altabajaproductos "
+                            + " FROM productos WHERE (PrecioSinIVA LIKE  '" + val + "%')ORDER BY IDProducto ASC"
+                            + " LIMIT " + limitador[0] + "," + limitador[1] + "";
+                    break;
+                case "PrecioCIVA":
+                    SSQL = "SELECT IDProducto, Descripcio, PrecioSinIVA, PrecioConIVA, Cantidad, Oferta, altabajaproductos "
+                            + " FROM productos WHERE (PrecioConIVA LIKE  '" + val + "%')ORDER BY IDProducto ASC"
+                            + " LIMIT " + limitador[0] + "," + limitador[1] + "";
+                    break;
                 case "":
                     SSQL = "SELECT IDProducto, Descripcio, PrecioSinIVA, PrecioConIVA, Cantidad, Oferta, altabajaproductos "
                             + " FROM productos ORDER BY IDProducto ASC"
                             + " LIMIT " + limitador[0] + "," + limitador[1] + "";
-                    out.println("no me pasaste nada papu");
                     break;
                 default:
+                     JOptionPane.showConfirmDialog(null, "Filtro erroneo", "ERROR", JOptionPane.ERROR);
                     break;
             }
             ConexionDB cc = new ConexionDB();
@@ -78,11 +91,11 @@ public class ConsultasStock {
             PreparedStatement st = conect.prepareStatement(SSQL);
             try ( // Ejecuto la consulta en un ResultSet
                     ResultSet rs = st.executeQuery()) {
-                o.removeAllItems();
+             
                 //isBeforeFirst devuelve true si el cursor esta antes de la primera fila.
                 //Tomo los datos de la BD los asigno a variables para despues agregarlos como filas
                 while (rs.next()) {
-                    
+
                     String c = "Alta";
                     int a = rs.getInt("altabajaproductos");
                     id = rs.getInt("IDProducto");
@@ -94,10 +107,11 @@ public class ConsultasStock {
                     if (a == 0) {
                         c = "Baja";
                     }
-                    
+
                     ModeloTabla.addRow(new Object[]{id, desc, cant, preS, preC, offe, c});
                     //asignamos los datos a la tabla
-                }   if (ModeloTabla.getRowCount() == 0) {
+                }
+                if (ModeloTabla.getRowCount() == 0) {
                     out.println("No hay registros");
                 }
             }
@@ -116,6 +130,100 @@ public class ConsultasStock {
         b.getColumnModel().getColumn(4).setPreferredWidth(100);
         b.getColumnModel().getColumn(5).setPreferredWidth(100);
         b.getTableHeader().setReorderingAllowed(false);
+
+    }
+    //Metodo para buscar por cantidad precioiva sin iva en tabla stock
+
+    public void buscarPorCantidadPrecio(String filtro, String valA, String valB, JTable tabla, int[] limitador) {
+       int id = -1;
+            DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        try {
+            
+            //Cantidad de columnas mas encabezado
+            String[] columnas = new String[]{"IDProducto", "Descripción", "Cantidad", "PrecioS/IVA", "PrecioC/IVA", "Oferta", "Alta/Baja"};
+            //Inserto el objeto columnas para modificarlas con setColumnIdentifiers;
+            
+            model.setColumnIdentifiers(columnas);
+            //Ordena la tabla por los header
+            TableRowSorter<TableModel> elQueOrdena = new TableRowSorter<>(model);
+            tabla.setRowSorter(elQueOrdena);
+            ModificacionJtable mod = new ModificacionJtable();
+            mod.limpiarTabla(tabla);
+            //Señalizo string sql para pasar buscar en la base de datos
+            String SSQL = null;
+            //Me conecto a la base de datos
+            //Este es el filtro que recibo de busqueda en el select del frame
+             if(valA.matches("[+-]?[\\d]*[.]?[\\d]+") && valA != "" && valB.matches("[+-]?[\\d]*[.]?[\\d]+") && valB != ""){
+            switch (filtro) {
+                case "Cantidad":
+                    SSQL = "SELECT DISTINCT *"
+                            + "FROM productos WHERE (Cantidad BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                    
+                    break;
+                case "PrecioSIVA":
+                    SSQL = "SELECT DISTINCT *"
+                            + "FROM productos WHERE (PrecioSinIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                    
+                    break;
+                case "PrecioCIVA":
+                    SSQL = "SELECT DISTINCT *"
+                            + "FROM productos WHERE (PrecioConIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                    
+                    break;
+                default:
+                    JOptionPane.showConfirmDialog(null, "Filtro erroneo", "ERROR", JOptionPane.ERROR);
+                    
+                    break;
+            }
+             
+            //Conexion a la BD y busqueda por RS result set
+            ConexionDB con = new ConexionDB();
+            //conexion establecida
+            Connection conect = con.getConnection();
+            //Preparo la sentencia SQL
+            PreparedStatement ps = conect.prepareStatement(SSQL);
+            
+            ResultSet rs = ps.executeQuery();
+            //Tomo los datos de la BD los asigno a variables para despues agregarlos como filas
+                while (rs.next()) {
+
+                    String c = "Alta";
+                    int a = rs.getInt("altabajaproductos");
+                    id = rs.getInt("IDProducto");
+                    String desc = rs.getString("Descripcio");
+                    int cant = rs.getInt("Cantidad");
+                    Double preS = rs.getDouble("PrecioSinIVA");
+                    Double preC = rs.getDouble("PrecioConIVA");
+                    int offe = rs.getInt("Oferta");
+                    if (a == 0) {
+                        c = "Baja";
+                    }
+                    
+                    model.addRow(new Object[]{id, desc, cant, preS, preC, offe, c});
+                    //asignamos los datos a la tabla
+                }
+                if (model.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron registros en la BD","ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                }else{
+                 JOptionPane.showMessageDialog(null, "Ha ingresados caracteres no validos","ERROR", JOptionPane.ERROR_MESSAGE);
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultasStock.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception e){
+       Logger.getLogger(ConsultasStock.class.getName()).log(Level.SEVERE,null,e);
+        }
+         
+        //pasamos la tabla a el metodo
+        tabla.setModel( model);
+        //Doy tamaño a las columnas
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(100);
+        tabla.getColumnModel().getColumn(5).setPreferredWidth(100);
+        tabla.getTableHeader().setReorderingAllowed(false);
+             
 
     }
 //Metodo de la tabla agregar prducto
@@ -284,7 +392,7 @@ public class ConsultasStock {
                 //Recorro el resulset buscando lo que deseo de la consulta, y lo paso a las variables
                 //instanciadas vacias
                 while (rs.next()) {
-                    
+
                     leg[0] = rs.getString("Descripcio");
                     leg[1] = rs.getString("Cantidad");
                     //Cargo los elementos deseados a la tabla por defecto
@@ -386,17 +494,17 @@ public class ConsultasStock {
                     String sql = "";
                     int numFilas = tbl2.getRowCount();
                     for (int l = 0; l < numFilas; l++) {
-                        String id = (String) tbl2.getValueAt(l, 0);
-                        out.println(id);
+                        String id = tbl2.getValueAt(l, 0).toString();
+
                         String altaBaja = (String) tbl2.getValueAt(l, 6);
-                        out.println(altaBaja);
+
                         if (altaBaja.equals("Alta")) {
                             sql = "UPDATE productos SET altabajaproductos = 1 WHERE IDproducto = " + id + "";
                             st.executeUpdate(sql);
                         } else {
                             sql = "UPDATE productos SET altabajaproductos = 0 WHERE IDproducto = " + id + "";
                             st.executeUpdate(sql);
-                            out.println("LLegue");
+
                         }
                     }
                 }

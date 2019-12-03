@@ -7,6 +7,7 @@ package FNC;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,9 +29,44 @@ public class ConsultasDePaginado {
             SQLLL = "SELECT DISTINCT count(*) AS total "
                     + " FROM productos WHERE (IDProducto LIKE  '" + valor + "%')ORDER BY IDProducto ASC";
 
+        } else if (filtro.equals("PrecioSinIVA")) {
+            SQLLL = "SELECT DISTINCT count(*) AS total "
+                    + " FROM productos WHERE (PrecioSinIVA LIKE  '" + valor + "%')ORDER BY IDProducto ASC";
+        } else if (filtro.equals("PrecioConIVA")) {
+            SQLLL = "SELECT DISTINCT count(*) AS total "
+                    + " FROM productos WHERE (PrecioConIVA LIKE  '" + valor + "%')ORDER BY IDProducto ASC";
         }
 
         return SQLLL;
+    }
+
+    //Cuenta las filas de busqueda para paginar el stock por cantidad o precio
+    public String paginarPorCant(String fil, String valA, String valB) {
+       
+        switch (fil) {
+            case "Cantidad":
+                SQLLL = "SELECT DISTINCT count(*) AS total"
+                        + "FROM productos WHERE (Cantidad BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+
+                break;
+            case "PrecioSIVA":
+                SQLLL = "SELECT DISTINCT count(*) AS total"
+                        + "FROM productos WHERE (PrecioSinIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+
+                break;
+            case "PrecioCIVA":
+                SQLLL = "SELECT DISTINCT count(*) AS total"
+                        + "FROM productos WHERE (PrecioConIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+
+                break;
+            default:
+                JOptionPane.showConfirmDialog(null, "Filtro erroneo", "ERROR", JOptionPane.ERROR);
+
+                break;
+        }
+       
+        
+         return SQLLL;
     }
 
     //carga sql para el ingreso instantaneo de stock
@@ -58,11 +94,12 @@ public class ConsultasDePaginado {
 
         return SQLLL;
     }
+
     //sql de busqueda por usuario en la pestaña movimiento de ventas !
-    public String buscarPorUsuarioMovimiento(String user){
-       SQLLL = "SELECT DISTINCT count(*) AS total "
-                    + "FROM venta INNER JOIN  detallevta ON venta.idVenta = detallevta.idVenta "
-                    + "WHERE (venta.Usuario LIKE '" + user + "%') GROUP BY  venta.idVenta AND detallevta.idventa_idproducto ";
-       return SQLLL;
+    public String buscarPorUsuarioMovimiento(String user) {
+        SQLLL = "SELECT DISTINCT count(*) AS total "
+                + "FROM venta INNER JOIN  detallevta ON venta.idVenta = detallevta.idVenta "
+                + "WHERE (venta.Usuario LIKE '" + user + "%') GROUP BY  venta.idVenta AND detallevta.idventa_idproducto ";
+        return SQLLL;
     }
 }

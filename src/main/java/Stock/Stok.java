@@ -96,6 +96,10 @@ public class Stok extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         btnrefrescartabla = new javax.swing.JButton();
         imglabel = new javax.swing.JLabel();
+        filCant = new javax.swing.JComboBox();
+        TxtBuscar1 = new javax.swing.JTextField();
+        btnBuscarCant = new javax.swing.JButton();
+        TxtBuscar2 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnProductos = new javax.swing.JButton();
         VolverM2 = new javax.swing.JButton();
@@ -160,7 +164,7 @@ public class Stok extends javax.swing.JFrame {
             }
         });
 
-        TipoBusqueda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Descripción", "IDProducto" }));
+        TipoBusqueda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Descripción", "IDProducto", "PrecioSIVA", "PrecioCIVA" }));
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -367,7 +371,7 @@ public class Stok extends javax.swing.JFrame {
             }
         });
 
-        btnrefrescartabla.setText("refresca stock");
+        btnrefrescartabla.setText("Refresca stock");
         btnrefrescartabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnrefrescartablaActionPerformed(evt);
@@ -384,6 +388,19 @@ public class Stok extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
+
+        filCant.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cantidad", "PrecioSIVA", "PrecioCIVA" }));
+
+        TxtBuscar1.setToolTipText("Precio o cant inicial");
+
+        btnBuscarCant.setText("Buscar");
+        btnBuscarCant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCantActionPerformed(evt);
+            }
+        });
+
+        TxtBuscar2.setToolTipText("Precio o cant final");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -415,20 +432,19 @@ public class Stok extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(botonPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel13)
                                 .addGap(4, 4, 4)
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(btnrefrescartabla)
                                 .addGap(40, 40, 40)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnModTabla)
                                 .addGap(18, 18, 18)
@@ -438,15 +454,29 @@ public class Stok extends javax.swing.JFrame {
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel1)
                                 .addGap(4, 4, 4)
-                                .addComponent(cmbPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(filCant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(17, 17, 17)
+                                .addComponent(TxtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TxtBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(jLabel3)
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel4))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(btnBuscar)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                                .addComponent(btnBuscarCant)))))
+                .addGap(45, 45, 45))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -474,19 +504,22 @@ public class Stok extends javax.swing.JFrame {
                         .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel13))
-                    .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(btnBuscar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar)
+                            .addComponent(filCant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtBuscar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarCant))))
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnModTabla)
@@ -1323,6 +1356,13 @@ public class Stok extends javax.swing.JFrame {
             conec.cargarTablaStockBajo(tblStockBajo);
             conec.buscarStock(Filtro, Busqueda, Tabla2, result);
 
+        } else if (this.llamadaV3 == 2) {
+            ConsultasStock con = new ConsultasStock();
+            con.cargarTablaStockBajo(tblStockBajo);
+            String filCantidad = filCant.getSelectedItem().toString();
+            String valA = TxtBuscar1.getText();
+            String valB = TxtBuscar2.getText();
+            con.buscarPorCantidadPrecio(filCantidad, valA, valB, Tabla2, result);
         }
     }//GEN-LAST:event_cmbPagActionPerformed
 
@@ -1408,8 +1448,28 @@ public class Stok extends javax.swing.JFrame {
     }//GEN-LAST:event_btnrefrescartablaActionPerformed
 
     private void imglabelAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_imglabelAncestorAdded
-      
+
     }//GEN-LAST:event_imglabelAncestorAdded
+
+    private void btnBuscarCantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCantActionPerformed
+        //Boton buscar de lista stock
+        Paginado p = new Paginado();
+        ConsultasDePaginado cdp = new ConsultasDePaginado();
+        //Tomo el filtro y el valor para ejecutar consulta
+        String filtroCant = filCant.getSelectedItem().toString();
+        String valA = TxtBuscar1.getText();
+        String valB = TxtBuscar2.getText();
+        //Genero consulta para contar los registros
+        String SSQL = cdp.paginarPorCant(filtroCant, valA, valB);
+        //Paso el combo y el sql para que cuente los registros y pagine el JTable
+        p.contarReg(cmbPag, SSQL);
+        //Instancio llamada para ejecutar sql despues de contar los registro 
+        //Debe de hacerse doble consulta para paginar un JTable
+        this.llamadaV3 = 2;
+        //llamo al evento en cmb para que me ejecute la consulta final con los limitadores
+        this.cmbPagActionPerformed(evt);
+        p.setJlabelPag(jLabel4, cmbPag);
+    }//GEN-LAST:event_btnBuscarCantActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -1431,6 +1491,8 @@ public class Stok extends javax.swing.JFrame {
     public javax.swing.JTable Tabla2;
     private javax.swing.JComboBox TipoBusqueda;
     private javax.swing.JTextField TxtBuscar;
+    private javax.swing.JTextField TxtBuscar1;
+    private javax.swing.JTextField TxtBuscar2;
     public static javax.swing.JButton VolverM1;
     public static javax.swing.JButton VolverM2;
     public static javax.swing.JButton VolverM3;
@@ -1439,6 +1501,7 @@ public class Stok extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAgregarFila;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarCant;
     private javax.swing.JButton btnBuscarProv;
     private javax.swing.JButton btnConfigStock;
     private javax.swing.JButton btnElimProv;
@@ -1457,6 +1520,7 @@ public class Stok extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbAlBa;
     private javax.swing.JComboBox<String> cmbFiltro;
     public javax.swing.JComboBox<String> cmbPag;
+    private javax.swing.JComboBox filCant;
     private javax.swing.JLabel imglabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;

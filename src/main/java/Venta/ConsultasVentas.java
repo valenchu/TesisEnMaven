@@ -192,12 +192,12 @@ public class ConsultasVentas {
         Integer ofe;
         String fecha;
         Double importe;
-
+        //Agrego el modlde al modelo de la tabla
+        DefaultTableModel model = (DefaultTableModel) tbl.getModel();
         try {
-            //Agrego el modlde al modelo de la tabla
-            ModeloTabla = (DefaultTableModel) tbl.getModel();
+
             // TableRowSorter Sirve para odenar las tablas por su header
-            TableRowSorter<TableModel> elQueOrdena = new TableRowSorter<>(ModeloTabla);
+            TableRowSorter<TableModel> elQueOrdena = new TableRowSorter<>(model);
             tbl.setRowSorter(elQueOrdena);
             String sql = "";
 
@@ -231,7 +231,7 @@ public class ConsultasVentas {
                     cant = rs.getInt("detallevta.Cant");
                     ofe = rs.getInt("detallevta.oferta");
                     //Cargo los datos al modelo de tabla
-                    ModeloTabla.addRow(new Object[]{idVenta, u, idProd, desc, fecha, cant, preSIVA, ofe, importe});
+                    model.addRow(new Object[]{idVenta, u, idProd, desc, fecha, cant, preSIVA, ofe, importe});
                 }
             }
             con.desconectar();
@@ -240,7 +240,7 @@ public class ConsultasVentas {
             getLogger(ConsultasVentas.class.getName()).log(SEVERE, null, ex);
         }
 
-        tbl.setModel(ModeloTabla);
+        tbl.setModel(model);
 
     }
 //Busqueda por user en la tabla movimiento venta
