@@ -153,7 +153,8 @@ public class ConsultasStock {
             String SSQL = null;
             //Me conecto a la base de datos
             //Este es el filtro que recibo de busqueda en el select del frame
-             if(valA.matches("[+-]?[\\d]*[.]?[\\d]+") && valA != "" && valB.matches("[+-]?[\\d]*[.]?[\\d]+") && valB != ""){
+            //Verifico por caracteres que los numeros ingresados sean correctos
+             if(valA.matches("[+-]?[\\d]*[.]?[\\d]+") && valA != "" && valB.matches("[+-]?[\\d]*[.]?[\\d]+") && valB != "" && (Integer.parseInt(valA)< Integer.parseInt(valB) && (Integer.parseInt(valA) > 0) && (Integer.parseInt(valB) > 0) )){
             switch (filtro) {
                 case "Cantidad":
                     SSQL = "SELECT DISTINCT *"
