@@ -25,7 +25,9 @@ public class ControladorBackUpBD extends ModeloBackUp {
         //llamo a back up para obterner los parametros
    
         
-
+if(getUrlGuardado().isEmpty() || getUsuario().isEmpty() || getContra().isEmpty() || getNomBD().isEmpty()){
+    JOptionPane.showMessageDialog(null, "Error no se pudo completar la operación, por favor rellene todos los campos para hacer un backup", "ERROR", JOptionPane.ERROR_MESSAGE);
+}else{
         try {
             String executeCmd = ""+getUrlGuardado()+" -u "+getUsuario()+" -p"+getContra()+" "+getNomBD()+" -R";
             
@@ -55,14 +57,19 @@ public class ControladorBackUpBD extends ModeloBackUp {
             
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error no se pudo completar la operación, por favor rellene todos los campos para hacer un backup", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
         }
+    }
+
         
     }
 
     //Metodo para obtener backUpBD
     public void restore() {
-        //llamo a back up para obterner los parametros
+        if(getUrlRecuperar().isEmpty() || getUsuario().isEmpty() || getContra().isEmpty() || getNomBD().isEmpty()){
+    JOptionPane.showMessageDialog(null, "Error no se pudo completar la operación, por favor rellene todos los campos correctamente para restaurar BD", "ERROR", JOptionPane.ERROR_MESSAGE);
+}else{
+        //llamo a back up para obterner los parametro  
         
         try {
             String executeCmd = ""+getUrlRecuperar()+" -u "+getUsuario()+" -p"+getContra()+" "+getNomRecuperarBD()+"";
@@ -95,7 +102,8 @@ public class ControladorBackUpBD extends ModeloBackUp {
 
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error no se pudo completar la operación, por favor rellene todos los campos correctamente para restaurar BD", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
         }
+    }
     }
 }
