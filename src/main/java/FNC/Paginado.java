@@ -5,9 +5,16 @@
  */
 package FNC;
 
-import coneccion.ConsultasGenerales;
+import coneccion.ConexionDB;
+import static java.lang.Double.parseDouble;
 import static java.lang.Math.ceil;
 import static java.lang.System.out;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Logger.getLogger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -46,30 +53,56 @@ public class Paginado {
     //Cuento los registros y le asigno numero de pagina al cmb
 
     public void contarReg(JComboBox cmb, String sqlNumReg) {
-        ConsultasGenerales consultas = new ConsultasGenerales();
+      
         Double count = 0.0;//Variable que guarda numero de registro consulta
         Double cantReg = 0.0;//Variable que se le instancia la cantidad de registros para calcularlo
         //y dar la cantidad de paginas
         Integer cantPag = 0;//Variable donde se almacena el numero final de pagina
 
-        count = consultas.contarRegSql(sqlNumReg);// Metodo donde se le pasa el SQL para contar reg.
+        count = contarRegSql(sqlNumReg);// Metodo donde se le pasa el SQL para contar reg.
         if (count != 0) {
             //Asigno cant de reg
             cantReg = count;
             //Calculo pagina y asigno numero de pag.
             cantPag = (int) calcularNumPag(cantReg);
-            out.println("La cantidad de registro de la consulta movimientos son = " + cantReg);
-            out.println("La cantidad de paginas a poner en el cmb es de = " + cantPag);
+            System.out.println("La cantidad de registro de la consulta movimientos son = " + cantReg);
+            System.out.println("La cantidad de paginas a poner en el cmb es de = " + cantPag);
             //Paso cmb y numero de pagina para borrar los datos del cmb y intanciarlo con el
             //numero de pag.
             cmbPaginas(cmb, cantPag);
 
         }
     }
+    
+        //Cuenta registros tabla
+
+    public double contarRegSql(String countSql) {
+        //Creo objeto bd
+        ConexionDB con = new ConexionDB();
+        double numReg = 0;
+        try {
+            //Conecto bd
+            Connection cn = con.getConnection();
+            //Prearo el sql
+            PreparedStatement st = cn.prepareStatement(countSql);
+            //Asigno el sql a resulset para trabajar con el 
+            ResultSet rs = st.executeQuery();
+            //repaso los registros con next()
+            if (rs.next()) {
+                //Asigno numero de reg
+                numReg = parseDouble(rs.getString("total"));//sql ejemplo SELECT count(*) AS total FROM tabla
+            }                                                    //Tengo que poner AS total si o si
+
+            System.out.println("Numero de registros " + numReg);
+        } catch (SQLException ex) {
+            getLogger(ConexionDB.class.getName()).log(SEVERE, null, ex);
+        }
+        //Retorno la cantidad de reg
+        return numReg;
+    }
 
     //Contar los registros pero pasando el numero de registro no sql
     public void contarRegSinSql(JComboBox cmb, double numreg) {
-        ConsultasGenerales consultas = new ConsultasGenerales();
         Double count = 0.0;//Variable que guarda numero de registro consulta
         Double cantReg = 0.0;//Variable que se le instancia la cantidad de registros para calcularlo
         //y dar la cantidad de paginas
@@ -81,8 +114,8 @@ public class Paginado {
             cantReg = count;
             //Calculo pagina y asigno numero de pag.
             cantPag = (int) calcularNumPag(cantReg);
-            out.println("La cantidad de registro de la consulta movimientos son = " + cantReg);
-            out.println("La cantidad de paginas a poner en el cmb es de = " + cantPag);
+            System.out.println("La cantidad de registro de la consulta movimientos son = " + cantReg);
+            System.out.println("La cantidad de paginas a poner en el cmb es de = " + cantPag);
             //Paso cmb y numero de pagina para borrar los datos del cmb y intanciarlo con el
             //numero de pag.
             cmbPaginas(cmb, cantPag);

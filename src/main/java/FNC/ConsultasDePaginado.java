@@ -12,6 +12,7 @@ import java.util.Date;
  *
  * @author Valentin
  */
+//Clase que se encarga de generar la mayoría de las consultas de paginado
 public class ConsultasDePaginado {
 
     private String SQLLL = "";
@@ -39,14 +40,14 @@ public class ConsultasDePaginado {
         return SQLLL;
     }
 
-    //Consulta sql de movimiento veta
+    //Consulta sql de las fechas de movimiento venta
     public String getMovimientoConsulta(Date desdee, Date hastaa) {
         // tipo de formato que tendra la fecha
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         //Paso fechas a string para hacer consulta
         String desde = f.format(desdee);
         String hasta = f.format(hastaa);
-        SQLLL = "SELECT DISTINCT count(*) AS total, venta.*, detallevta.* "
+        SQLLL = "SELECT DISTINCT count(*) AS total "
                 + "FROM venta INNER JOIN  detallevta ON venta.idVenta = detallevta.idVenta "
                 + " WHERE (detallevta.Fecha BETWEEN '" + desde + "' AND '" + hasta + "') GROUP BY detallevta.idventa_idproducto  ";
         return SQLLL;
@@ -56,5 +57,12 @@ public class ConsultasDePaginado {
         SQLLL = "SELECT count(*) AS total FROM detallevta";
 
         return SQLLL;
+    }
+    //sql de busqueda por usuario en la pestaña movimiento de ventas !
+    public String buscarPorUsuarioMovimiento(String user){
+       SQLLL = "SELECT DISTINCT count(*) AS total "
+                    + "FROM venta INNER JOIN  detallevta ON venta.idVenta = detallevta.idVenta "
+                    + "WHERE (venta.Usuario LIKE '" + user + "%') GROUP BY  venta.idVenta AND detallevta.idventa_idproducto ";
+       return SQLLL;
     }
 }

@@ -883,14 +883,11 @@ public class Vta extends javax.swing.JFrame {
 
         //ejecuto sql antes de la llamada para contar numero de registro 
         if ((txtBuscarUser.getText() != null) && (!txtBuscarUser.getText().equals(""))) {
+            //creo objeto consulta paginado para buscar por SQL y paginar la consulta
+            ConsultasDePaginado conp  = new ConsultasDePaginado();
             String user = txtBuscarUser.getText();
-            System.out.println("El user es = " + user);
-            String sqll = "";
-            sqll = "SELECT DISTINCT count(*) AS total,venta.idVenta, venta.Usuario,detallevta.IDproducto, "
-                    + "detallevta.Descripcion, detallevta.Fecha, detallevta.Cant, "
-                    + "detallevta.PrecioSIVA, detallevta.oferta,detallevta.Importe "
-                    + "FROM venta INNER JOIN  detallevta ON venta.idVenta = detallevta.idVenta "
-                    + "WHERE (venta.Usuario LIKE '" + user + "%')";
+            System.out.println("El user es = " + user);            
+            String sqll = conp.buscarPorUsuarioMovimiento(user);
             //Envio sql para paginar jtble
             p.contarReg(cmbPaginas, sqll);
             //Instancio llamada 2 para trabajar con ese sql de datos
