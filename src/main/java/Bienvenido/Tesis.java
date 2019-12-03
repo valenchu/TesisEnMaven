@@ -26,9 +26,7 @@ public class Tesis {
                 break;
             }
         }
-
         //</editor-fold>
-
         /* Create and display the form */
         invokeLater(() -> {
             new Inicio_Sesion().setVisible(true);
