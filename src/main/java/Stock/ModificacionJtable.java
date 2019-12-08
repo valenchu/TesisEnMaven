@@ -23,6 +23,31 @@ public class ModificacionJtable extends JFrame {
         tbl.setModel(dtm);
         tbl.getColumnModel().getColumn(0).setPreferredWidth(250);
     }
+    //Modifica la tabla con combobox
+
+    public void modificartblConcmb(JTable tbl, JComboBox cmbCat) {
+        ConsultasStock con = new ConsultasStock();
+
+        con.cmbCargarCategorias2(cmbCat);
+
+        String[] columnas = {"Descripción", "Cantidad", "PrecioS/IVA", "PrecioC/IVA", "Oferta", "Categoría"};
+
+        //Recibo modelo de jtable y le paso los titulos indicados arriba
+        DefaultTableModel dtm = (DefaultTableModel) tbl.getModel();
+        dtm.setColumnIdentifiers(columnas);
+
+        tbl.setModel(dtm);
+        //Agrego cmb a la tabla
+        TableColumn columna = tbl.getColumnModel().getColumn(5);
+        columna.setCellEditor(new DefaultCellEditor(cmbCat));
+
+        DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+        render.setVisible(true);
+
+        columna.setCellRenderer(render);
+
+        tbl.getColumnModel().getColumn(0).setPreferredWidth(250);
+    }
 //Agrega fila a tabla
 
     public void agregarfila(JTable tblAgregarProd, int cmb) {
@@ -31,11 +56,13 @@ public class ModificacionJtable extends JFrame {
         DefaultTableModel dtm = (DefaultTableModel) tblAgregarProd.getModel();
         //getSelectedRow devuelve el numero de filas seleccionadas
         int filaSeleccionada = tblAgregarProd.getSelectedRow();
+        //Cuenta las columnas
+        int cantidadColum = tblAgregarProd.getColumnCount();
         if (filaSeleccionada != -1) {
             //Selecciona
             while (i <= cmb) {
                 //insertRow sirve para insertar fila en donde nosotros querramos
-                dtm.insertRow(filaSeleccionada + 1, new Object[]{null, null, null, null, null});
+                dtm.insertRow(filaSeleccionada + 1, new Object[]{null, null, null, null, null, null});
                 tblAgregarProd.clearSelection();
                 tblAgregarProd.setModel(dtm);
                 i++;
@@ -43,7 +70,7 @@ public class ModificacionJtable extends JFrame {
             }
         } else {
             while (k <= cmb) {
-                dtm.addRow(new Object[]{null, null, null, null, null});
+                dtm.addRow(new Object[]{null, null, null, null, null, null});
                 tblAgregarProd.setModel(dtm);
                 k++;
             }
@@ -84,7 +111,7 @@ public class ModificacionJtable extends JFrame {
             showMessageDialog(null, "Error al limpiar la tabla.");
         }
     }
-    //Elimina fila tabla
+    //Elimina la fila seleccionada a sacar
 
     public void eliminarFilasTabla(JTable tbl) {
 

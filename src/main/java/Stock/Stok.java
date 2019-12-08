@@ -15,6 +15,7 @@ import FNC.Paginado;
 import static Stock.ConsultasStock.numero;
 import Venta.Vta;
 import static java.awt.EventQueue.invokeLater;
+import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import static java.awt.event.KeyEvent.VK_F1;
 import static java.lang.Integer.valueOf;
@@ -22,7 +23,11 @@ import java.sql.SQLException;
 import java.util.Vector;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Logger.getLogger;
+import javax.swing.ButtonModel;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -46,8 +51,11 @@ public class Stok extends javax.swing.JFrame {
     public Vector s;
     DefaultTableModel a;
     DefaultTableModel b;
-    public int llamadaV3;
+    public int valor;
+
     int cant = 0;
+    public static Integer val = -1;
+    public static int contar = 0;
 
     public Stok() {
         initComponents();
@@ -69,8 +77,11 @@ public class Stok extends javax.swing.JFrame {
     private void initComponents() {
 
         jFileChooser1 = new javax.swing.JFileChooser();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
+        cmbAgregarProducto = new javax.swing.JComboBox<>();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jtabla3 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
+        btnBuscarXcant = new javax.swing.JButton();
         TxtBuscar = new javax.swing.JTextField();
         TipoBusqueda = new javax.swing.JComboBox();
         btnBuscar = new javax.swing.JButton();
@@ -86,16 +97,29 @@ public class Stok extends javax.swing.JFrame {
         cmbAlBa = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         btnModTabla = new javax.swing.JButton();
-        cmbPag = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         btnConfigStock = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
-        btnrefrescartabla = new javax.swing.JButton();
         imglabel = new javax.swing.JLabel();
+        filCant = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        btnrefrescar = new javax.swing.JButton();
+        txtDesde = new javax.swing.JTextField();
+        txtHasta = new javax.swing.JTextField();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        cate = new javax.swing.JList<>();
+        jLabel15 = new javax.swing.JLabel();
+        btnSiguiente = new javax.swing.JButton();
+        btnAnterior = new javax.swing.JButton();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        pruebaLista = new javax.swing.JList<>();
+        btnCurrent = new javax.swing.JButton();
+        boton = new javax.swing.JRadioButton();
+        jXButton1 = new org.jdesktop.swingx.JXButton();
+        cmbCategorias = new org.jdesktop.swingx.JXComboBox();
+        jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnProductos = new javax.swing.JButton();
         VolverM2 = new javax.swing.JButton();
@@ -125,30 +149,53 @@ public class Stok extends javax.swing.JFrame {
         jScrollPane8 = new javax.swing.JScrollPane();
         tblAgregarProv = new javax.swing.JTable();
         VolverM4 = new javax.swing.JButton();
+        jXPanel1 = new org.jdesktop.swingx.JXPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tblAgregarCategoria = new org.jdesktop.swingx.JXTable();
+        jXPanel2 = new org.jdesktop.swingx.JXPanel();
+        btnAgregarCategoria = new org.jdesktop.swingx.JXButton();
+        txtAgregarCat = new org.jdesktop.swingx.JXTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jXPanel3 = new org.jdesktop.swingx.JXPanel();
+        btnModificar = new org.jdesktop.swingx.JXButton();
+        txtIdModificar = new org.jdesktop.swingx.JXTextField();
+        txtModificarCat = new org.jdesktop.swingx.JXTextField();
+        butonAlta = new javax.swing.JRadioButton();
+        butonBaja = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtRefreshTabla = new org.jdesktop.swingx.JXButton();
+
+        cmbAgregarProducto.setToolTipText("Clikee para ver jcomboBox");
+        cmbAgregarProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        cmbAgregarProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Stock");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
-        setMinimumSize(new java.awt.Dimension(800, 600));
-        setSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(850, 700));
+        setPreferredSize(new java.awt.Dimension(850, 650));
+        setSize(new java.awt.Dimension(850, 700));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
             }
         });
 
-        jTabbedPane3.setMinimumSize(new java.awt.Dimension(800, 600));
-        jTabbedPane3.setPreferredSize(new java.awt.Dimension(800, 600));
-        jTabbedPane3.addKeyListener(new java.awt.event.KeyAdapter() {
+        jtabla3.setBackground(new java.awt.Color(255, 255, 204));
+        jtabla3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jtabla3.setMinimumSize(new java.awt.Dimension(800, 600));
+        jtabla3.setPreferredSize(new java.awt.Dimension(850, 650));
+        jtabla3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTabbedPane3KeyPressed(evt);
+                jtabla3KeyPressed(evt);
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(800, 600));
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(850, 650));
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel1MouseClicked(evt);
@@ -157,6 +204,24 @@ public class Stok extends javax.swing.JFrame {
         jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPanel1KeyPressed(evt);
+            }
+        });
+
+        btnBuscarXcant.setText("Buscar");
+        btnBuscarXcant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarXcantActionPerformed(evt);
+            }
+        });
+
+        TxtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TxtBuscarActionPerformed(evt);
+            }
+        });
+        TxtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TxtBuscarKeyPressed(evt);
             }
         });
 
@@ -171,6 +236,15 @@ public class Stok extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setText("Buscar por:");
+        jLabel13.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel13AncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         VolverM1.setText("Volver Menu");
         VolverM1.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +258,7 @@ public class Stok extends javax.swing.JFrame {
             }
         });
 
-        botonPedido.setText("Pedido de productos");
+        botonPedido.setText("Pedido insumos");
         botonPedido.setToolTipText("Lleva a ventana para realizar un pedido");
         botonPedido.setVisible(true);
         botonPedido.addActionListener(new java.awt.event.ActionListener() {
@@ -202,14 +276,22 @@ public class Stok extends javax.swing.JFrame {
                 "Bajo stock mercadería", "Cantidad"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tblStockBajo.setMinimumSize(new java.awt.Dimension(225, 32));
         tblStockBajo.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -268,20 +350,6 @@ public class Stok extends javax.swing.JFrame {
         });
         Tabla2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Tabla2.getTableHeader().setReorderingAllowed(false);
-        Tabla2.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                Tabla2AncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        Tabla2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                Tabla2KeyPressed(evt);
-            }
-        });
         jScrollPane3.setViewportView(Tabla2);
         if (Tabla2.getColumnModel().getColumnCount() > 0) {
             Tabla2.getColumnModel().getColumn(0).setResizable(false);
@@ -303,7 +371,17 @@ public class Stok extends javax.swing.JFrame {
 
         cmbAlBa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar:", "Alta", "Baja" }));
         cmbAlBa.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        cmbAlBa.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                cmbAlBaAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Alta/Baja Producto");
 
         btnModTabla.setText("Modificar tabla");
@@ -313,27 +391,8 @@ public class Stok extends javax.swing.JFrame {
             }
         });
 
-        cmbPag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbPag.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbPagActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Pagina:");
-
-        jLabel3.setText("de");
-
-        jLabel4.setText("jLabel4");
-        jLabel4.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jLabel4AncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Página:");
 
         btnConfigStock.setText("Modificar stock bajo");
         btnConfigStock.setToolTipText("Boton que establece el numero para la cantidad de stock bajo");
@@ -361,16 +420,14 @@ public class Stok extends javax.swing.JFrame {
         jScrollPane4.setViewportView(txtArea);
 
         jButton1.setText("Cargar pedido");
+        jButton1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButton1FocusGained(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        btnrefrescartabla.setText("refresca stock");
-        btnrefrescartabla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnrefrescartablaActionPerformed(evt);
             }
         });
 
@@ -385,125 +442,319 @@ public class Stok extends javax.swing.JFrame {
             }
         });
 
+        filCant.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cantidad", "PrecioSIVA", "PrecioCIVA" }));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Categorías{");
+
+        btnrefrescar.setText("Refrescar Tabla");
+        btnrefrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnrefrescarActionPerformed(evt);
+            }
+        });
+
+        txtHasta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtHastaKeyPressed(evt);
+            }
+        });
+
+        cate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cate.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        cate.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        cate.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                cateAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        cate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cateMouseClicked(evt);
+            }
+        });
+        cate.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                cateValueChanged(evt);
+            }
+        });
+        jScrollPane6.setViewportView(cate);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setText("Buscar por:");
+
+        btnSiguiente.setText("sig");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+
+        btnAnterior.setText("ant");
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+
+        pruebaLista.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pruebaLista.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        pruebaLista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        pruebaLista.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                pruebaListaAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        pruebaLista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                pruebaListaValueChanged(evt);
+            }
+        });
+        jScrollPane7.setViewportView(pruebaLista);
+
+        btnCurrent.setText("***");
+        btnCurrent.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        btnCurrent.setEnabled(false);
+        btnCurrent.setFocusPainted(false);
+        btnCurrent.setFocusable(false);
+        btnCurrent.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                btnCurrentAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        btnCurrent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCurrentActionPerformed(evt);
+            }
+        });
+
+        boton.setText("jRadioButton1");
+        boton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonActionPerformed(evt);
+            }
+        });
+
+        jXButton1.setText("Modificar categoría");
+        jXButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXButton1ActionPerformed(evt);
+            }
+        });
+
+        cmbCategorias.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                cmbCategoriasAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("Categorías para modificar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel7)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(modProduc)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cmbAlBa, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(77, 77, 77)
-                                .addComponent(jButton1))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
                                 .addComponent(imglabel, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnConfigStock)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botonPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel13)
-                                .addGap(4, 4, 4)
-                                .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnrefrescartabla)
-                                .addGap(40, 40, 40)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnModTabla)
+                                .addGap(92, 92, 92)
+                                .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnLimpiar)
-                                .addGap(56, 56, 56)
-                                .addComponent(VolverM1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel1)
-                                .addGap(4, 4, 4)
-                                .addComponent(cmbPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel3)
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel4))
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(btnBuscar)))))
-                .addContainerGap())
+                                .addComponent(modProduc)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbAlBa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnConfigStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(2, 2, 2))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnrefrescar)
+                                .addGap(54, 54, 54)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botonPedido))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(85, 85, 85))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(VolverM1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel15)
+                                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(9, 9, 9)
+                                                .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(filCant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(boton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnBuscar)
+                                            .addComponent(btnBuscarXcant)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(4, 4, 4)
+                                                .addComponent(btnAnterior)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btnCurrent, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(btnModTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnLimpiar)
+                                            .addComponent(btnSiguiente))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jXButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbCategorias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jScrollPane3)
+                .addGap(50, 50, 50))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(imglabel)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addComponent(jLabel7))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(botonPedido)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbAlBa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(modProduc)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnConfigStock)
-                        .addComponent(jButton1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(63, 63, 63)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(modProduc)
+                                .addComponent(cmbAlBa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnrefrescar))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton1)
+                                .addComponent(botonPedido)))
+                        .addGap(2, 2, 2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnConfigStock))
+                            .addComponent(imglabel)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel13))
-                    .addComponent(TipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(btnBuscar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnModTabla)
-                        .addComponent(btnLimpiar)
-                        .addComponent(btnrefrescartabla))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(VolverM1)
+                        .addComponent(TxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar)
+                        .addComponent(TipoBusqueda)
+                        .addComponent(jLabel13))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
                         .addComponent(jLabel1)
-                        .addComponent(cmbPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)))
-                .addGap(23, 23, 23))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDesde)
+                            .addComponent(btnBuscarXcant)
+                            .addComponent(filCant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15)
+                            .addComponent(cmbCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnAnterior)
+                                .addComponent(btnSiguiente)
+                                .addComponent(btnCurrent))
+                            .addComponent(VolverM1))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(boton)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnModTabla)
+                                    .addComponent(btnLimpiar)
+                                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(28, 28, 28))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
-        jTabbedPane3.addTab("Stock", jPanel1);
+        boton.setVisible(false);
 
-        jPanel2.setBackground(new java.awt.Color(100, 183, 100));
+        jtabla3.addTab("Stock", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel2.setPreferredSize(new java.awt.Dimension(850, 650));
         jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel2MouseClicked(evt);
@@ -536,23 +787,24 @@ public class Stok extends javax.swing.JFrame {
 
         tblAgregarProd.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Titlo5"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Titlo5", "Titulo6"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        tblAgregarProd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         //getTableHeader().setReorderingAllowed(false); Hace que no se mueva la
         //Cabecera del jtable
         tblAgregarProd.getTableHeader().setReorderingAllowed(false);
@@ -571,6 +823,9 @@ public class Stok extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tblAgregarProd);
+        if (tblAgregarProd.getColumnModel().getColumnCount() > 0) {
+            tblAgregarProd.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(cmbAgregarProducto));
+        }
 
         btnFilas.setText("Agregar filas");
         btnFilas.setToolTipText("Agrega el numero de filas seleccionado");
@@ -619,12 +874,12 @@ public class Stok extends javax.swing.JFrame {
                 .addComponent(btnEliminarTodo)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(635, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(VolverM2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -632,22 +887,23 @@ public class Stok extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104)
+                .addGap(92, 92, 92)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnProductos)
                     .addComponent(btnFilas)
                     .addComponent(nroFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminar)
                     .addComponent(btnEliminarTodo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
                 .addComponent(VolverM2)
                 .addGap(30, 30, 30))
         );
 
-        jTabbedPane3.addTab("Agregar producto", jPanel2);
+        jtabla3.addTab("Agregar producto", jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(100, 183, 100));
-        jPanel3.setPreferredSize(new java.awt.Dimension(700, 500));
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel3.setBorder(new org.jdesktop.swingx.border.IconBorder());
+        jPanel3.setPreferredSize(new java.awt.Dimension(850, 650));
         jPanel3.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -755,12 +1011,8 @@ public class Stok extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addGap(10, 10, 10))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(VolverM3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -781,7 +1033,11 @@ public class Stok extends javax.swing.JFrame {
                         .addComponent(btnBuscarProv)
                         .addGap(6, 6, 6)
                         .addComponent(btnLimTbl)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 252, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(VolverM3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -804,14 +1060,15 @@ public class Stok extends javax.swing.JFrame {
                         .addComponent(txtBuscarProv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnBuscarProv)
                     .addComponent(btnLimTbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 263, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
                 .addComponent(VolverM3)
                 .addGap(30, 30, 30))
         );
 
-        jTabbedPane3.addTab("Proveedores", jPanel3);
+        jtabla3.addTab("Proveedores", jPanel3);
 
-        jPanel4.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel4.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel4.setPreferredSize(new java.awt.Dimension(850, 650));
 
         btnAgregar.setText("Agregar proveedor");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -904,29 +1161,31 @@ public class Stok extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(VolverM4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAgregarFila)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminarFila)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLimpiarTabla)
-                        .addGap(0, 357, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnAgregar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAgregarFila)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEliminarFila)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnLimpiarTabla)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(VolverM4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -934,14 +1193,219 @@ public class Stok extends javax.swing.JFrame {
                     .addComponent(btnAgregarFila)
                     .addComponent(btnEliminarFila)
                     .addComponent(btnLimpiarTabla))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 322, Short.MAX_VALUE)
                 .addComponent(VolverM4)
                 .addGap(30, 30, 30))
         );
 
-        jTabbedPane3.addTab("Agregar Proveedor", jPanel4);
+        jtabla3.addTab("Agregar Proveedor", jPanel4);
 
-        getContentPane().add(jTabbedPane3, java.awt.BorderLayout.PAGE_START);
+        jXPanel1.setBackground(new java.awt.Color(204, 255, 204));
+        jXPanel1.setEnabled(false);
+        jXPanel1.setPreferredSize(new java.awt.Dimension(850, 650));
+
+        tblAgregarCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tblAgregarCategoria.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "null"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblAgregarCategoria.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                tblAgregarCategoriaAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        tblAgregarCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAgregarCategoriaMouseClicked(evt);
+            }
+        });
+        jScrollPane9.setViewportView(tblAgregarCategoria);
+        if (tblAgregarCategoria.getColumnModel().getColumnCount() > 0) {
+            tblAgregarCategoria.getColumnModel().getColumn(0).setMinWidth(50);
+            tblAgregarCategoria.getColumnModel().getColumn(0).setMaxWidth(80);
+            tblAgregarCategoria.getColumnModel().getColumn(1).setResizable(false);
+            tblAgregarCategoria.getColumnModel().getColumn(2).setMinWidth(0);
+            tblAgregarCategoria.getColumnModel().getColumn(2).setPreferredWidth(0);
+            tblAgregarCategoria.getColumnModel().getColumn(2).setMaxWidth(0);
+        }
+
+        jXPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnAgregarCategoria.setText("Agregar");
+        btnAgregarCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCategoriaActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Categoría");
+
+        javax.swing.GroupLayout jXPanel2Layout = new javax.swing.GroupLayout(jXPanel2);
+        jXPanel2.setLayout(jXPanel2Layout);
+        jXPanel2Layout.setHorizontalGroup(
+            jXPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jXPanel2Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addGroup(jXPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jXPanel2Layout.createSequentialGroup()
+                        .addComponent(txtAgregarCat, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                        .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jXPanel2Layout.setVerticalGroup(
+            jXPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXPanel2Layout.createSequentialGroup()
+                .addContainerGap(86, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jXPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAgregarCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(88, 88, 88))
+        );
+
+        jXPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jXPanel3.setPreferredSize(new java.awt.Dimension(390, 294));
+
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        txtIdModificar.setEnabled(false);
+
+        buttonGroup1.add(butonAlta);
+        butonAlta.setText("ALTA");
+
+        buttonGroup1.add(butonBaja);
+        butonBaja.setText("BAJA");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Categoría");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Id_categoría");
+
+        javax.swing.GroupLayout jXPanel3Layout = new javax.swing.GroupLayout(jXPanel3);
+        jXPanel3.setLayout(jXPanel3Layout);
+        jXPanel3Layout.setHorizontalGroup(
+            jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jXPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jXPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jXPanel3Layout.createSequentialGroup()
+                        .addGroup(jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtIdModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                            .addComponent(txtModificarCat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(butonAlta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(butonBaja)
+                        .addGap(21, 21, 21)))
+                .addContainerGap())
+        );
+        jXPanel3Layout.setVerticalGroup(
+            jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jXPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtIdModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtModificarCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(butonAlta)
+                    .addComponent(butonBaja))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+
+        txtRefreshTabla.setText("Refrescar Tabla");
+        txtRefreshTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRefreshTablaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jXPanel1Layout = new javax.swing.GroupLayout(jXPanel1);
+        jXPanel1.setLayout(jXPanel1Layout);
+        jXPanel1Layout.setHorizontalGroup(
+            jXPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jXPanel1Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jXPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXPanel1Layout.createSequentialGroup()
+                        .addComponent(jXPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jXPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(71, 71, 71))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXPanel1Layout.createSequentialGroup()
+                        .addComponent(txtRefreshTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(158, 158, 158))))
+        );
+        jXPanel1Layout.setVerticalGroup(
+            jXPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jXPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRefreshTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(jXPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jXPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jXPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
+                .addContainerGap(150, Short.MAX_VALUE))
+        );
+
+        jtabla3.addTab("Categorías", jXPanel1);
+
+        getContentPane().add(jtabla3, java.awt.BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
@@ -957,14 +1421,106 @@ public class Stok extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formKeyPressed
 
-    private void jTabbedPane3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTabbedPane3KeyPressed
+    private void jtabla3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtabla3KeyPressed
         char car = evt.getKeyChar();
         if (car == VK_ESCAPE) {
             Tabla2.clearSelection();
             tblStockBajo.clearSelection();
 
         }        // TODO add your handling code here:
-    }//GEN-LAST:event_jTabbedPane3KeyPressed
+    }//GEN-LAST:event_jtabla3KeyPressed
+
+    private void VolverM4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VolverM4KeyPressed
+        // TODO add your handling code here:
+        char carr = (char) evt.getKeyCode();
+        if (carr == VK_F1) {
+            Menu men = new Menu();
+            men.setVisible(true);
+            dispose();
+        }
+    }//GEN-LAST:event_VolverM4KeyPressed
+
+    private void VolverM4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VolverM4ActionPerformed
+        // TODO add your handling code here:
+        Menu men = new Menu();
+        men.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_VolverM4ActionPerformed
+
+    private void tblAgregarProvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblAgregarProvKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblAgregarProvKeyPressed
+
+    private void tblAgregarProvMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAgregarProvMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblAgregarProvMouseClicked
+
+    private void tblAgregarProvAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblAgregarProvAncestorAdded
+        // TODO add your handling code here:
+        ModiTblProveedor mod = new ModiTblProveedor();
+        mod.modificartblprove(tblAgregarProv);
+    }//GEN-LAST:event_tblAgregarProvAncestorAdded
+
+    private void btnLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarTablaActionPerformed
+        // TODO add your handling code here:
+        ModificacionJtable mod = new ModificacionJtable();
+        mod.limpiarTabla(tblAgregarProv);
+    }//GEN-LAST:event_btnLimpiarTablaActionPerformed
+
+    private void btnEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFilaActionPerformed
+        // TODO add your handling code here:
+        ModificacionJtable mod = new ModificacionJtable();
+        mod.eliminarFilas(tblAgregarProv);
+    }//GEN-LAST:event_btnEliminarFilaActionPerformed
+
+    private void btnAgregarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFilaActionPerformed
+        // TODO add your handling code here:
+        ModiTblProveedor mod = new ModiTblProveedor();
+        mod.agregarfila(tblAgregarProv);
+    }//GEN-LAST:event_btnAgregarFilaActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+        ConsultaProveedor con = new ConsultaProveedor();
+        con.agregarProveedor(tblAgregarProv);
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+        // TODO add your handling code here:
+        tblProveedor.clearSelection();
+    }//GEN-LAST:event_jPanel3MouseClicked
+
+    private void jPanel3AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel3AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel3AncestorAdded
+
+    private void tblProveedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblProveedorKeyPressed
+        // TODO add your handling code here:
+        int code = evt.getKeyCode();
+        if (code == VK_ESCAPE) {
+            tblProveedor.clearSelection();
+        }
+    }//GEN-LAST:event_tblProveedorKeyPressed
+
+    private void tblProveedorAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblProveedorAncestorAdded
+        // TODO add your handling code here:
+
+        ConsultaProveedor cn = new ConsultaProveedor();
+        cn.buscarProveeInstantaneamente(tblProveedor);
+    }//GEN-LAST:event_tblProveedorAncestorAdded
+
+    private void btnTruncateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTruncateActionPerformed
+        int b = showConfirmDialog(null, "¿Esta seguro que desea borrar completamente los registros de proveedores? \n"
+                + " Esto producirá que se quede sin datos de los proveedores", "Información", WARNING_MESSAGE);
+        if (b == YES_OPTION) {
+            try {
+                ConsultaProveedor ini = new ConsultaProveedor();
+                ini.borrarRegistroProvee();
+            } catch (SQLException ex) {
+                getLogger(Stok.class.getName()).log(SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnTruncateActionPerformed
 
     private void txtBuscarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarProvActionPerformed
         // TODO add your handling code here:
@@ -995,18 +1551,37 @@ public class Stok extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_VolverM3ActionPerformed
 
+    private void btnLimTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimTblActionPerformed
+        // TODO add your handling code here:
+        ModificacionJtable mod = new ModificacionJtable();
+        mod.limpiarTabla(tblProveedor);
+    }//GEN-LAST:event_btnLimTblActionPerformed
+
+    private void btnElimProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimProvActionPerformed
+        // TODO add your handling code here:
+        ModiTblProveedor mod = new ModiTblProveedor();
+        mod.eliminarProveedor(tblProveedor);
+    }//GEN-LAST:event_btnElimProvActionPerformed
+
+    private void btnModProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProvActionPerformed
+        // TODO add your handling code here:
+        ModiTblProveedor mod = new ModiTblProveedor();
+        mod.modProve(tblProveedor);
+    }//GEN-LAST:event_btnModProvActionPerformed
+
     private void jPanel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel2KeyPressed
         // TODO add your handling code here:
         int code = evt.getKeyCode();
         if (code == VK_ESCAPE) {
             tblAgregarProd.clearSelection();
         }
-
     }//GEN-LAST:event_jPanel2KeyPressed
 
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
         // TODO add your handling code here:
         tblAgregarProd.clearSelection();
+        tblAgregarProd.removeEditor();
+
     }//GEN-LAST:event_jPanel2MouseClicked
 
     private void btnEliminarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarTodoActionPerformed
@@ -1045,7 +1620,7 @@ public class Stok extends javax.swing.JFrame {
     private void tblAgregarProdAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblAgregarProdAncestorAdded
         // TODO add your handling code here:
         ModificacionJtable ag = new ModificacionJtable();
-        ag.modificartbl(tblAgregarProd);
+        ag.modificartblConcmb(tblAgregarProd, cmbAgregarProducto);
     }//GEN-LAST:event_tblAgregarProdAncestorAdded
 
     private void VolverM2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VolverM2KeyPressed
@@ -1086,6 +1661,56 @@ public class Stok extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel1MouseClicked
 
+    private void imglabelAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_imglabelAncestorAdded
+        ConsultasDePaginado con = new ConsultasDePaginado();
+        Paginado p = new Paginado();
+        String sqll;
+        //Traigo el sql que quiero pasar
+        sqll = con.getAncestorAddedTablaStock();
+        System.out.println("SQL= " + sqll);
+        //Paso SQL para contar reg
+        //Borro todo del cmb
+        this.val = 2;
+        p.contarRegLista(pruebaLista, sqll);
+        pruebaLista.setSelectedIndex(0);
+    }//GEN-LAST:event_imglabelAncestorAdded
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        CargaDePedido cp = new CargaDePedido();
+        this.contar = 1;
+        cp.setVisible(true);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtAreaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_txtAreaAncestorAdded
+        // TODO add your handling code here:
+        //llamo a numero para obtener el valor de la cantidad de stock bajo establecida
+        ConsultasStock cs = new ConsultasStock();
+        txtArea.setText("Cantidad de stock\nbajo establecida\nen = Cantidad (" + numero() + ")");
+        btnrefrescar.doClick();
+    }//GEN-LAST:event_txtAreaAncestorAdded
+
+    private void btnConfigStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigStockActionPerformed
+        // TODO add your handling code here:
+        Funciones f = new Funciones();
+        ConsultasStock cn = new ConsultasStock();
+        //ingresa numero de stock bajo
+        String numero = showInputDialog(null, "Ingrese un número para establecer el valor de Stock bajo en el programa", "Configuración", INFORMATION_MESSAGE);
+        //si es numerico se guarda y se asigna a la BD como nuevo valor
+        if (isNumeric(numero) == true) {
+            cn.cfgNumStock(valueOf(numero));
+
+        } else {
+            //si no es numerico no se guarda y muestra el else que es un mensaje de error
+            showMessageDialog(null, "Error, usted no ha ingresado un numero !", "ERROR", ERROR_MESSAGE);
+        }
+        //una vez asignado el numero vuelve a cargar el jtable con el nuevo valor numerico asignado a la BD
+        cn.cargarTablaStockBajo(tblStockBajo);
+        //llamo a numero para obtener el valor de la cantidad de stock bajo establecida
+        txtArea.setText("Cantidad de stock\nbajo establecida\nen = Cantidad (" + numero() + ")");
+    }//GEN-LAST:event_btnConfigStockActionPerformed
+
     private void btnModTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModTablaActionPerformed
         //Modifica las columnas tabla
         ConsultasStock cc = new ConsultasStock();
@@ -1093,11 +1718,20 @@ public class Stok extends javax.swing.JFrame {
         cc.cargarTablaStockBajo(tblStockBajo);
     }//GEN-LAST:event_btnModTablaActionPerformed
 
+    private void cmbAlBaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_cmbAlBaAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbAlBaAncestorAdded
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
         ModificacionJtable mod = new ModificacionJtable();
         mod.limpiarTabla(Tabla2);
         cmbAlBa.setSelectedIndex(0);
+        TxtBuscar.setText("");
+        txtDesde.setText("");
+        txtHasta.setText("");
+        pruebaLista.removeAll();
+
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void modProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modProducActionPerformed
@@ -1180,236 +1814,304 @@ public class Stok extends javax.swing.JFrame {
     }//GEN-LAST:event_VolverM1ActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        //Boton buscar de lista stock
+
+        //Paso SQL para contar reg
+        //Borro todo del cmb
+        //cmbPrincipal.removeAllItems();
+        // p.contarReg(cmbPrincipal, sqll);
+        ConsultasDePaginado con = new ConsultasDePaginado();
         Paginado p = new Paginado();
-        ConsultasDePaginado cdp = new ConsultasDePaginado();
-        //Tomo el filtro y el valor para ejecutar consulta
-        String fil = TipoBusqueda.getSelectedItem().toString();
-        String val = TxtBuscar.getText();
-        //Genero consulta para contar los registros
-        String SSQL = cdp.getsqlBuscarStok(fil, val);
-        //Paso el combo y el sql para que cuente los registros y pagine el JTable
-        p.contarReg(cmbPag, SSQL);
-        //Instancio llamada para ejecutar sql despues de contar los registro 
-        //Debe de hacerse doble consulta para paginar un JTable
-        this.llamadaV3 = 1;
-        //llamo al evento en cmb para que me ejecute la consulta final con los limitadores
-        this.cmbPagActionPerformed(evt);
-        p.setJlabelPag(jLabel4, cmbPag);
+        String sqll;
+        //Traigo el sql que quiero pasar
+        String bus = TipoBusqueda.getSelectedItem().toString();
+        sqll = con.getsqlBuscarStok(bus, TxtBuscar.getText());
+        System.out.println("SQL= " + sqll);
+        p.contarRegLista(pruebaLista, sqll);
+        this.val = 3;
+
+        boton.doClick();
+
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void btnElimProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimProvActionPerformed
+    private void btnBuscarXcantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarXcantActionPerformed
+        ConsultasDePaginado con = new ConsultasDePaginado();
+        Paginado p = new Paginado();
+        String sqll;
+        DefaultListModel l = (DefaultListModel) pruebaLista.getModel();
+        //Traigo el sql que quiero pasar
+        try {
+            String bus = filCant.getSelectedItem().toString();
+            int valorA = Integer.parseInt(txtDesde.getText());
+            int valorB = Integer.parseInt(txtHasta.getText());
+            sqll = con.paginarPorCant(bus, valorA, valorB);
+            System.out.println("SQL= " + sqll);
+            //Paso SQL para contar reg
+            //Borro todo del cmb
+            Object comand = evt.getSource();
+
+            this.val = 1;
+            double num = p.contarRegSql(sqll);
+            if (num > 0) {
+                // p.contarReg(cmbPrincipal, sqll);
+                p.contarRegLista(pruebaLista, sqll);
+                pruebaLista.setSelectedIndex(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "No existen datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            System.out.println("CARACTERES BAD");
+        }
+
+    }//GEN-LAST:event_btnBuscarXcantActionPerformed
+
+    private void cateAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_cateAncestorAdded
+        ConsultasStock co = new ConsultasStock();
+        co.cmbCargarCategorias(cate);
+    }//GEN-LAST:event_cateAncestorAdded
+
+    private void cateValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_cateValueChanged
+
+    }//GEN-LAST:event_cateValueChanged
+
+    private void cateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cateMouseClicked
+
+        ConsultasDePaginado con = new ConsultasDePaginado();
+        Paginado p = new Paginado();
+        String sqll;
+        //Traigo el sql que quiero pasar 
+
+        sqll = con.filCategoria(cate);
+        System.out.println("SQL= " + sqll);
+        //Paso SQL para contar reg
+        //Borro todo del cmb
+        this.val = 5;
+        double num = p.contarRegSql(sqll);
+        if (num > 0) {
+            // p.contarReg(cmbPrincipal, sqll);
+            p.contarRegLista(pruebaLista, sqll);
+            pruebaLista.setSelectedIndex(0);
+        } else {
+            JOptionPane.showMessageDialog(null, "No existen datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_cateMouseClicked
+
+    private void jButton1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButton1FocusGained
         // TODO add your handling code here:
-        ModiTblProveedor mod = new ModiTblProveedor();
-        mod.eliminarProveedor(tblProveedor);
-    }//GEN-LAST:event_btnElimProvActionPerformed
+    }//GEN-LAST:event_jButton1FocusGained
 
-    private void btnModProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModProvActionPerformed
-        // TODO add your handling code here:
-        ModiTblProveedor mod = new ModiTblProveedor();
-        mod.modProve(tblProveedor);
-    }//GEN-LAST:event_btnModProvActionPerformed
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        Paginado p = new Paginado();
+        ConsultasStock cc = new ConsultasStock();
+        boolean boton = p.btnS(pruebaLista);
+        btnSiguiente.setEnabled(boton);
+    }//GEN-LAST:event_btnSiguienteActionPerformed
 
-    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
-        // TODO add your handling code here:
-        tblProveedor.clearSelection();
-    }//GEN-LAST:event_jPanel3MouseClicked
+    private void pruebaListaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_pruebaListaAncestorAdded
+        ConsultasStock cc = new ConsultasStock();
 
-    private void btnLimTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimTblActionPerformed
-        // TODO add your handling code here:
-        ModificacionJtable mod = new ModificacionJtable();
-        mod.limpiarTabla(tblProveedor);
-    }//GEN-LAST:event_btnLimTblActionPerformed
+        Paginado p = new Paginado();
+        int[] resultado = {0, 0};
+        resultado = p.jlistDePaginas(pruebaLista);
+        if (this.val == 2) {
+            cc.rellenarStock(Tabla2, resultado);
 
-    private void jPanel3AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel3AncestorAdded
-        // TODO add your handling code here:
+        }
+        Object comand = evt.getSource();
+        if (comand.equals(btnBuscar)) {
+            System.out.println("ENTRE EN BUSCAR DESCRIPCIÓN");
+            //  String fil, String val, JTable b, int[] limitador
+            String g = TipoBusqueda.getSelectedItem().toString();
+            if (!g.equals("") && !g.equals(null)) {
+                cc.buscarStock(g, TxtBuscar.getText(), Tabla2, resultado);
+                System.out.println("ENTRE EN BUSCAR DESCRIPCIÓN");
+            } else {
+                System.out.println("Igual a null");
+            }
 
-    }//GEN-LAST:event_jPanel3AncestorAdded
+        }
+        boton.doClick();
 
-    private void btnTruncateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTruncateActionPerformed
-        int b = showConfirmDialog(null, "¿Esta seguro que desea borrar completamente los registros de proveedores? \n"
-                + " Esto producirá que se quede sin datos de los proveedores", "Información", WARNING_MESSAGE);
-        if (b == YES_OPTION) {
-            try {
-                ConsultaProveedor ini = new ConsultaProveedor();
-                ini.borrarRegistroProvee();
-            } catch (SQLException ex) {
-                getLogger(Stok.class.getName()).log(SEVERE, null, ex);
+
+    }//GEN-LAST:event_pruebaListaAncestorAdded
+
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        int elemento = 0;
+        elemento = pruebaLista.getSelectedIndex();
+        System.out.println("elemento" + elemento);
+        if (elemento != -1) {
+            pruebaLista.setSelectedIndex(elemento - 1);
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void pruebaListaValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_pruebaListaValueChanged
+        ConsultasStock cc = new ConsultasStock();
+
+        Paginado p = new Paginado();
+        int[] resultado = {0, 0};
+        resultado = p.jlistDePaginas(pruebaLista);
+        if (this.val == 2) {
+            cc.rellenarStock(Tabla2, resultado);
+        }
+
+        if (this.val == 4) {
+            cc.rellenarStock(Tabla2, resultado);
+
+        } else if (this.val == 1) {
+            int valA = Integer.parseInt(txtDesde.getText());
+            int valB = Integer.parseInt(txtHasta.getText());
+            String filtro = filCant.getSelectedItem().toString();
+            cc.buscarPorCantidadPrecio(filtro, valA, valB, Tabla2, resultado);
+        } else if (this.val == 5) {
+            cc.filtroCategoria(cate, Tabla2, resultado);
+        }
+
+
+    }//GEN-LAST:event_pruebaListaValueChanged
+
+    private void botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActionPerformed
+        ConsultasStock cc = new ConsultasStock();
+
+        Paginado p = new Paginado();
+        int[] resultado = {0, 0};
+        Object comand = evt.getSource();
+        resultado = p.btnCurrent(pruebaLista);
+        if (this.val == 3) {
+            System.out.println("ENTRE EN BUSCAR DESCRIPCIÓN");
+            //  String fil, String val, JTable b, int[] limitador
+            String g = TipoBusqueda.getSelectedItem().toString();
+            if (!g.equals("") && !g.equals(null)) {
+                cc.buscarStock(g, TxtBuscar.getText(), Tabla2, resultado);
+                System.out.println("ENTRE EN BUSCAR DESCRIPCIÓN");
+            } else {
+                System.out.println("Igual a null");
+            }
+
+        }
+
+    }//GEN-LAST:event_botonActionPerformed
+
+    private void btnCurrentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCurrentActionPerformed
+    }//GEN-LAST:event_btnCurrentActionPerformed
+
+    private void jLabel13AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel13AncestorAdded
+
+    }//GEN-LAST:event_jLabel13AncestorAdded
+
+    private void btnrefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrefrescarActionPerformed
+        this.val = 4;
+
+        ConsultasDePaginado c = new ConsultasDePaginado();
+        Paginado p = new Paginado();
+        String sqll = c.getbtnRefrescar();
+        TxtBuscar.setText("");
+
+        p.contarRegLista(pruebaLista, sqll);
+        pruebaLista.setSelectedIndex(0);
+        this.val = 4;
+    }//GEN-LAST:event_btnrefrescarActionPerformed
+
+    private void btnCurrentAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_btnCurrentAncestorAdded
+        int elemento = 0;
+        elemento = pruebaLista.getSelectedIndex();
+        if (elemento != -1) {
+            if (elemento == pruebaLista.getSelectedIndex()) {
+                btnCurrent.setName("=" + elemento + "=");
             }
         }
+    }//GEN-LAST:event_btnCurrentAncestorAdded
 
-    }//GEN-LAST:event_btnTruncateActionPerformed
+    private void TxtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtBuscarActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
-        ConsultaProveedor con = new ConsultaProveedor();
-        con.agregarProveedor(tblAgregarProv);
-    }//GEN-LAST:event_btnAgregarActionPerformed
+// TODO add your handling code here:
+    }//GEN-LAST:event_TxtBuscarActionPerformed
 
-    private void tblAgregarProvAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblAgregarProvAncestorAdded
-        // TODO add your handling code here:
-        ModiTblProveedor mod = new ModiTblProveedor();
-        mod.modificartblprove(tblAgregarProv);
-    }//GEN-LAST:event_tblAgregarProvAncestorAdded
-
-    private void tblAgregarProvMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAgregarProvMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblAgregarProvMouseClicked
-
-    private void tblAgregarProvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblAgregarProvKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblAgregarProvKeyPressed
-
-    private void btnAgregarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarFilaActionPerformed
-        // TODO add your handling code here:
-        ModiTblProveedor mod = new ModiTblProveedor();
-        mod.agregarfila(tblAgregarProv);
-    }//GEN-LAST:event_btnAgregarFilaActionPerformed
-
-    private void btnEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFilaActionPerformed
-        // TODO add your handling code here:
-        ModificacionJtable mod = new ModificacionJtable();
-        mod.eliminarFilas(tblAgregarProv);
-    }//GEN-LAST:event_btnEliminarFilaActionPerformed
-
-    private void btnLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarTablaActionPerformed
-        // TODO add your handling code here:
-        ModificacionJtable mod = new ModificacionJtable();
-        mod.limpiarTabla(tblAgregarProv);
-    }//GEN-LAST:event_btnLimpiarTablaActionPerformed
-
-    private void VolverM4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VolverM4ActionPerformed
-        // TODO add your handling code here:
-        Menu men = new Menu();
-        men.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_VolverM4ActionPerformed
-
-    private void VolverM4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_VolverM4KeyPressed
-        // TODO add your handling code here:
-        char carr = (char) evt.getKeyCode();
-        if (carr == VK_F1) {
-            Menu men = new Menu();
-            men.setVisible(true);
-            dispose();
-        }
-    }//GEN-LAST:event_VolverM4KeyPressed
-
-    private void Tabla2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Tabla2KeyPressed
+    private void TxtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtBuscarKeyPressed
         char car = evt.getKeyChar();
-        if (car == VK_ESCAPE) {
-            Tabla2.clearSelection();
-            tblStockBajo.clearSelection();
-
+        if (car == KeyEvent.VK_ENTER) {
+            btnBuscar.doClick();
         }
-    }//GEN-LAST:event_Tabla2KeyPressed
+    }//GEN-LAST:event_TxtBuscarKeyPressed
 
-    private void cmbPagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPagActionPerformed
-        // TODO add your handling code here:
-        //Creo objeto paginado donde poseo la crecion de jtable por pagina
-        Paginado p = new Paginado();
-        //Creo vriable result en donde almacenare los dos numeros para limitar la consulta SQL
-        int[] result = {0, 0};
-        //Instancio la variable con los numeros a limitar
-        result = p.cmbDePaginas(cmbPag);
-        //Genero el if para depender de que llamada se realiza
-        if (this.llamadaV3 == 0) {
-            ConsultasStock con = new ConsultasStock();
-            con.rellenarStock(Tabla2, result);
-        } else if (this.llamadaV3 == 1) {
-            ConsultasStock conec = new ConsultasStock();
-            String Filtro = TipoBusqueda.getSelectedItem().toString();
-            String Busqueda = TxtBuscar.getText();
-            conec.cargarTablaStockBajo(tblStockBajo);
-            conec.buscarStock(Filtro, Busqueda, Tabla2, result);
-
+    private void txtHastaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHastaKeyPressed
+        char car = evt.getKeyChar();
+        if (txtDesde.getText() != "" && txtDesde.getText() != null) {
+            if (car == KeyEvent.VK_ENTER) {
+                btnBuscar.doClick();
+            }
         }
-    }//GEN-LAST:event_cmbPagActionPerformed
+    }//GEN-LAST:event_txtHastaKeyPressed
 
-    private void jLabel4AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel4AncestorAdded
-        // TODO add your handling code here:
-        Paginado p = new Paginado();
-        p.setJlabelPag(jLabel4, cmbPag);
-    }//GEN-LAST:event_jLabel4AncestorAdded
-
-    private void tblProveedorAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblProveedorAncestorAdded
-        // TODO add your handling code here:
-
-        ConsultaProveedor cn = new ConsultaProveedor();
-        cn.buscarProveeInstantaneamente(tblProveedor);
-
-    }//GEN-LAST:event_tblProveedorAncestorAdded
-
-    private void tblProveedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblProveedorKeyPressed
-        // TODO add your handling code here:
-        int code = evt.getKeyCode();
-        if (code == VK_ESCAPE) {
-            tblProveedor.clearSelection();
-        }
-    }//GEN-LAST:event_tblProveedorKeyPressed
-
-    private void btnConfigStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigStockActionPerformed
-        // TODO add your handling code here:
-        Funciones f = new Funciones();
-        ConsultasStock cn = new ConsultasStock();
-        //ingresa numero de stock bajo
-        String numero = showInputDialog(null, "Ingrese un número para establecer el valor de Stock bajo en el programa", "Configuración", INFORMATION_MESSAGE);
-        //si es numerico se guarda y se asigna a la BD como nuevo valor
-        if (isNumeric(numero) == true) {
-            cn.cfgNumStock(valueOf(numero));
-
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        ConsultasStock con = new ConsultasStock();
+        int idCate = Integer.parseInt(txtIdModificar.getText());
+        String a = txtModificarCat.getText().trim();
+        if (a.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar datos a modificar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (butonAlta.isSelected() == false) {
+            int opcion = JOptionPane.showConfirmDialog(butonAlta, "Esta seguro de darle de Baja al producto, este dejara de mostrarse como categoría", "INFORMACIÓN", JOptionPane.YES_NO_OPTION);
+            if (JOptionPane.YES_OPTION == opcion) {
+                con.modificarCategoria(idCate, txtModificarCat, butonAlta);
+                txtIdModificar.setText("");
+                txtModificarCat.setText("");
+                buttonGroup1.clearSelection();
+                txtRefreshTabla.doClick();
+            } else {
+                JOptionPane.showMessageDialog(null, "La categoría no se modifico", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
+            }
         } else {
-            //si no es numerico no se guarda y muestra el else que es un mensaje de error
-            showMessageDialog(null, "Error, usted no ha ingresado un numero !", "ERROR", ERROR_MESSAGE);
+            con.modificarCategoria(idCate, txtModificarCat, butonAlta);
+            txtIdModificar.setText("");
+            txtModificarCat.setText("");
+            buttonGroup1.clearSelection();
+            txtRefreshTabla.doClick();
         }
-        //una vez asignado el numero vuelve a cargar el jtable con el nuevo valor numerico asignado a la BD
-        cn.cargarTablaStockBajo(tblStockBajo);
-        //llamo a numero para obtener el valor de la cantidad de stock bajo establecida
-        txtArea.setText("Cantidad de stock\nbajo establecida\nen = Cantidad (" + numero() + ")");
-    }//GEN-LAST:event_btnConfigStockActionPerformed
+    }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void txtAreaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_txtAreaAncestorAdded
-        // TODO add your handling code here:
-        //llamo a numero para obtener el valor de la cantidad de stock bajo establecida
-        ConsultasStock cs = new ConsultasStock();
-        txtArea.setText("Cantidad de stock\nbajo establecida\nen = Cantidad (" + numero() + ")");
-    }//GEN-LAST:event_txtAreaAncestorAdded
+    private void tblAgregarCategoriaAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblAgregarCategoriaAncestorAdded
+        ConsultasStock con = new ConsultasStock();
+        con.rellenarJtableCategoria(tblAgregarCategoria);
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        CargaDePedido cp = new CargaDePedido();
-        cp.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_tblAgregarCategoriaAncestorAdded
 
-    private void Tabla2AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_Tabla2AncestorAdded
-        // TODO add your handling code here:
-        Paginado p = new Paginado();
-        ConsultasDePaginado cp = new ConsultasDePaginado();
-        //Paso la consulta y el cmb por string para realizar el proceso de paginado del table
-        //El resto funciona internamente en el metodo que esta en paginado en el paquete FNC
-        String sqlNumReg = cp.getAncestorAddedTablaStock();
-        p.contarReg(cmbPag, sqlNumReg);
-        this.llamadaV3 = 0;
+    private void tblAgregarCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAgregarCategoriaMouseClicked
+        funcionesCategoria fn = new funcionesCategoria();
+        fn.obtenerDatos(tblAgregarCategoria, butonAlta, butonBaja, txtModificarCat, txtIdModificar);
+    }//GEN-LAST:event_tblAgregarCategoriaMouseClicked
 
-    }//GEN-LAST:event_Tabla2AncestorAdded
+    private void txtRefreshTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRefreshTablaActionPerformed
+        ConsultasStock con = new ConsultasStock();
+        con.rellenarJtableCategoria(tblAgregarCategoria);
+        txtAgregarCat.setText("");        
+        txtIdModificar.setText("");
+        txtModificarCat.setText("");
+        buttonGroup1.clearSelection();
+    }//GEN-LAST:event_txtRefreshTablaActionPerformed
 
-    private void btnrefrescartablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrefrescartablaActionPerformed
-        // TODO add your handling code here:
-        //Uso este boton para llamarlo desde otras tablas y así refrescar tabla stock y stockBajo
-        Paginado p = new Paginado();
-        ConsultasDePaginado cp = new ConsultasDePaginado();
-        //Paso la consulta y el cmb por string para realizar el proceso de paginado del table
-        //El resto funciona internamente en el metodo que esta en paginado en el paquete FNC
-        String sqlNumReg = cp.getAncestorAddedTablaStock();
-        p.contarReg(cmbPag, sqlNumReg);
-        this.llamadaV3 = 0;
-        ConsultasStock cs = new ConsultasStock();
-        cs.cargarTablaStockBajo(tblStockBajo);
-    }//GEN-LAST:event_btnrefrescartablaActionPerformed
+    private void btnAgregarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCategoriaActionPerformed
+        ConsultasStock con = new ConsultasStock();
+        String cate = txtAgregarCat.getText().trim();
+        if(cate.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Debe ingresar datos para agregar una categoría nueva", "ERROR", JOptionPane.ERROR_MESSAGE); 
+        }else{
+            con.agregarCategoria(cate);
+            txtAgregarCat.setText("");
+            txtRefreshTabla.doClick();
+        }
+    }//GEN-LAST:event_btnAgregarCategoriaActionPerformed
 
-    private void imglabelAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_imglabelAncestorAdded
-      
-    }//GEN-LAST:event_imglabelAncestorAdded
+    private void cmbCategoriasAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_cmbCategoriasAncestorAdded
+ConsultasStock con = new ConsultasStock();
+con.cmbCargarCategorias2(cmbCategorias);
+    }//GEN-LAST:event_cmbCategoriasAncestorAdded
+
+    private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
+        int categorías = cmbCategorias.getSelectedIndex()+1;
+        ConsultasStock con = new ConsultasStock();
+        con.modificarCategoriaStork(Tabla2, categorías);
+    }//GEN-LAST:event_jXButton1ActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -1427,6 +2129,8 @@ public class Stok extends javax.swing.JFrame {
             new Stok().setVisible(true);
         });
     }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTable Tabla2;
     private javax.swing.JComboBox TipoBusqueda;
@@ -1435,12 +2139,17 @@ public class Stok extends javax.swing.JFrame {
     public static javax.swing.JButton VolverM2;
     public static javax.swing.JButton VolverM3;
     public static javax.swing.JButton VolverM4;
+    private javax.swing.JRadioButton boton;
     private javax.swing.JButton botonPedido;
     private javax.swing.JButton btnAgregar;
+    private org.jdesktop.swingx.JXButton btnAgregarCategoria;
     private javax.swing.JButton btnAgregarFila;
-    private javax.swing.JButton btnBuscar;
+    public static javax.swing.JButton btnAnterior;
+    public javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarProv;
+    private javax.swing.JButton btnBuscarXcant;
     private javax.swing.JButton btnConfigStock;
+    public static javax.swing.JButton btnCurrent;
     private javax.swing.JButton btnElimProv;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarFila;
@@ -1451,22 +2160,34 @@ public class Stok extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiarTabla;
     private javax.swing.JButton btnModProv;
     private javax.swing.JButton btnModTabla;
+    private org.jdesktop.swingx.JXButton btnModificar;
     private javax.swing.JButton btnProductos;
+    public static javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnTruncate;
-    public javax.swing.JButton btnrefrescartabla;
+    public javax.swing.JButton btnrefrescar;
+    public javax.swing.JRadioButton butonAlta;
+    public javax.swing.JRadioButton butonBaja;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JList<String> cate;
+    private javax.swing.JComboBox<String> cmbAgregarProducto;
     private javax.swing.JComboBox cmbAlBa;
+    private org.jdesktop.swingx.JXComboBox cmbCategorias;
     private javax.swing.JComboBox<String> cmbFiltro;
-    public javax.swing.JComboBox<String> cmbPag;
+    public javax.swing.JComboBox filCant;
     private javax.swing.JLabel imglabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
+    public javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
+    public javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1475,16 +2196,31 @@ public class Stok extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JScrollPane jScrollPane9;
+    private org.jdesktop.swingx.JXButton jXButton1;
+    private org.jdesktop.swingx.JXPanel jXPanel1;
+    private org.jdesktop.swingx.JXPanel jXPanel2;
+    private org.jdesktop.swingx.JXPanel jXPanel3;
+    private javax.swing.JTabbedPane jtabla3;
     private javax.swing.JButton modProduc;
     private javax.swing.JComboBox<String> nroFilas;
+    private javax.swing.JList<String> pruebaLista;
+    private org.jdesktop.swingx.JXTable tblAgregarCategoria;
     private javax.swing.JTable tblAgregarProd;
     private javax.swing.JTable tblAgregarProv;
     private javax.swing.JTable tblProveedor;
-    private javax.swing.JTable tblStockBajo;
+    public static javax.swing.JTable tblStockBajo;
+    private org.jdesktop.swingx.JXTextField txtAgregarCat;
     private javax.swing.JTextArea txtArea;
     private javax.swing.JTextField txtBuscarProv;
+    public volatile javax.swing.JTextField txtDesde;
+    public volatile javax.swing.JTextField txtHasta;
+    public org.jdesktop.swingx.JXTextField txtIdModificar;
+    public org.jdesktop.swingx.JXTextField txtModificarCat;
+    private org.jdesktop.swingx.JXButton txtRefreshTabla;
     // End of variables declaration//GEN-END:variables
 
 }

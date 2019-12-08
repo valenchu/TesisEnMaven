@@ -63,10 +63,11 @@ public class CargaDePedido extends javax.swing.JFrame {
         hastaDate = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(204, 204, 204));
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
 
-        jPanel1.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel1MouseClicked(evt);
@@ -357,7 +358,7 @@ public class CargaDePedido extends javax.swing.JFrame {
         //recargo la tabla pedidos
         tb.pedidoCarga(tblPedido, (String) cmbLimitTable.getSelectedItem());
         //recargo la tabla stock en ventana principal
-        st.btnrefrescartabla.doClick();
+        st.btnrefrescar.doClick();
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
