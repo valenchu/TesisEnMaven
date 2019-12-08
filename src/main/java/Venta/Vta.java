@@ -12,6 +12,7 @@ import FNC.Paginado;
 import Stock.ModificacionJtable;
 import java.awt.event.KeyEvent;
 import java.util.Date;
+import java.util.Formatter;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -111,12 +112,12 @@ public class Vta extends javax.swing.JFrame {
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(700, 500));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jPanel2.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
         jPanel2.setMinimumSize(new java.awt.Dimension(700, 500));
         jPanel2.setPreferredSize(new java.awt.Dimension(700, 800));
         this.pack();
 
-        jPanel4.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel4.setBackground(new java.awt.Color(204, 255, 204));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel4.setPreferredSize(new java.awt.Dimension(120, 419));
 
@@ -258,7 +259,7 @@ public class Vta extends javax.swing.JFrame {
                 .addGap(29, 29, 29))
         );
 
-        jPanel5.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel5.setBackground(new java.awt.Color(204, 255, 204));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel5.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
@@ -541,7 +542,7 @@ public class Vta extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Venta", jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -789,12 +790,12 @@ public class Vta extends javax.swing.JFrame {
         if (!txtPagoUser.getText().isEmpty()) {
 
             // var paga recive el pago
-            double paga = Double.parseDouble(txtPagoUser.getText());
+            double paga = (Double) Double.parseDouble(txtPagoUser.getText());
             if(paga < 0){
                 JOptionPane.showConfirmDialog(null, "Paga es menor que cero","ERROR", JOptionPane.ERROR_MESSAGE);
             }else{
             //var total recive total
-            double total = Double.parseDouble(txtTotal.getText());
+            double total = (Double) Double.parseDouble(txtTotal.getText());
             if (total != 0.0 || total != 0) {
                 //var vuelto calcula el vuelto a dar
                 double vuelto;
@@ -802,7 +803,7 @@ public class Vta extends javax.swing.JFrame {
                 //se le assigan vuelto a variable string para hacerlo mas preciso y sin errores 
                 // ya que asignando el vuelto directamente generaba algunos errores en el cual no sacaba
                 // el calculo correctamente !
-                String v = Double.toString(vuelto);
+                String v = (String) Double.toString(vuelto);
                 // seteo/envio el vuelto al textfield en el frame
                 txtVuelto.setText(v);
             } else {
@@ -824,20 +825,20 @@ public class Vta extends javax.swing.JFrame {
         Double porcentaje;
         Double cmbtotal = in.totalreset;
         if (indice == 0) {
-            txtTotal.setText(Double.toString(in.totalreset));
+            txtTotal.setText((String) Double.toString(in.totalreset));
             this.IVAS = "Sin IVA";
         } else if (indice == 1) {
             porcentaje = 21.0;
 
             cmbtotal = cmbtotal + ((cmbtotal * porcentaje) / 100);
-            cmbtotal = (double) Math.round(cmbtotal * 100) / 100;
+            cmbtotal = Double.valueOf( Math.round( (cmbtotal * 100)) / 100);
             txtTotal.setText(cmbtotal.toString());
             cmbDescTotal = cmbtotal;
             this.IVAS = "Con IVA 21%";
         } else if (indice == 2) {
             porcentaje = 10.5;
             cmbtotal = cmbtotal + ((cmbtotal * porcentaje) / 100);
-            cmbtotal = (double) Math.round(cmbtotal * 100) / 100;
+            cmbtotal = Double.valueOf( Math.round(cmbtotal * 100) / 100);
             txtTotal.setText(cmbtotal.toString());
             cmbDescTotal = cmbtotal;
             this.IVAS = "Con IVA 10.5%";
@@ -858,7 +859,7 @@ public class Vta extends javax.swing.JFrame {
 
     private void btnEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFilaActionPerformed
         FncTablas fn = new FncTablas();
-        fn.eliminarfilas(tblVenta, txtTotal);
+        fn.eliminarfilas(tblVenta, txtTotal, txtSubTotal);
     }//GEN-LAST:event_btnEliminarFilaActionPerformed
 
     private void btnEliminarFilaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnEliminarFilaKeyPressed
@@ -866,7 +867,7 @@ public class Vta extends javax.swing.JFrame {
         char carr = (char) evt.getKeyCode();
         if (carr == KeyEvent.VK_DELETE) {
             FncTablas fn = new FncTablas();
-            fn.eliminarfilas(tblVenta, txtTotal);
+            fn.eliminarfilas(tblVenta, txtTotal,txtSubTotal);
         }
     }//GEN-LAST:event_btnEliminarFilaKeyPressed
 
@@ -875,7 +876,7 @@ public class Vta extends javax.swing.JFrame {
         char carr = (char) evt.getKeyCode();
         if (carr == KeyEvent.VK_DELETE) {
             FncTablas fn = new FncTablas();
-            fn.eliminarfilas(tblVenta, txtTotal);
+            fn.eliminarfilas(tblVenta, txtTotal, txtSubTotal);
         }
     }//GEN-LAST:event_tblVentaKeyPressed
 

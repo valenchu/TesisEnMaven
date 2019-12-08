@@ -160,7 +160,7 @@ public class Contro extends javax.swing.JFrame {
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(600, 400));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(600, 500));
 
-        panel1.setBackground(new java.awt.Color(100, 183, 100));
+        panel1.setBackground(new java.awt.Color(204, 255, 204));
         panel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panel1.setMinimumSize(new java.awt.Dimension(600, 500));
         panel1.setPreferredSize(new java.awt.Dimension(600, 500));
@@ -347,7 +347,7 @@ public class Contro extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Registro usuarios", panel1);
 
-        panel2.setBackground(new java.awt.Color(100, 183, 100));
+        panel2.setBackground(new java.awt.Color(204, 255, 204));
         panel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panel2.setMinimumSize(new java.awt.Dimension(500, 500));
         panel2.setPreferredSize(new java.awt.Dimension(600, 500));
@@ -595,7 +595,7 @@ public class Contro extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Modificar usuarios", panel2);
 
-        jPanel2.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Link para red social Facebook : ");
@@ -740,7 +740,7 @@ public class Contro extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Modificar Redes Sociales", jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel3.setBackground(new java.awt.Color(204, 255, 204));
         jPanel3.setMinimumSize(new java.awt.Dimension(756, 571));
 
         txtGuardarBD.addActionListener(new java.awt.event.ActionListener() {

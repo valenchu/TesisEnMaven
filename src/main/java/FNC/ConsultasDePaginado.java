@@ -5,8 +5,11 @@
  */
 package FNC;
 
+import java.awt.event.ItemEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /**
@@ -41,22 +44,22 @@ public class ConsultasDePaginado {
     }
 
     //Cuenta las filas de busqueda para paginar el stock por cantidad o precio
-    public String paginarPorCant(String fil, String valA, String valB) {
+    public String paginarPorCant(String fil, int valA, int valB) {
        
         switch (fil) {
             case "Cantidad":
-                SQLLL = "SELECT DISTINCT count(*) AS total"
-                        + "FROM productos WHERE (Cantidad BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                SQLLL = "SELECT DISTINCT count(*) AS total "
+                        + "FROM productos WHERE ( Cantidad BETWEEN '" + valA + "' AND '" + valB + "') ";
 
                 break;
             case "PrecioSIVA":
-                SQLLL = "SELECT DISTINCT count(*) AS total"
-                        + "FROM productos WHERE (PrecioSinIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                SQLLL = "SELECT DISTINCT count(*) AS total "
+                        + "FROM productos WHERE (PrecioSinIVA BETWEEN '" + valA + "' AND '" + valB + "') ";
 
                 break;
             case "PrecioCIVA":
-                SQLLL = "SELECT DISTINCT count(*) AS total"
-                        + "FROM productos WHERE (PrecioConIVA BETWEEN '" + valA + "' AND '" + valB + "') ORDER BY IDProducto ASC";
+                SQLLL = "SELECT DISTINCT count(*) AS total "
+                        + "FROM productos WHERE (PrecioConIVA BETWEEN '" + valA + "' AND '" + valB + "') ";
 
                 break;
             default:
@@ -75,6 +78,13 @@ public class ConsultasDePaginado {
                 + " FROM productos ORDER BY IDProducto ASC ";
         return SQLLL;
     }
+    
+      //mismo metodo pero para boton refrescar
+    public String getbtnRefrescar() {
+        SQLLL = "SELECT count(*) AS total "
+                + " FROM productos ORDER BY IDProducto ASC ";
+        return SQLLL;
+    }
 
     //Consulta sql de las fechas de movimiento venta
     public String getMovimientoConsulta(Date desdee, Date hastaa) {
@@ -88,13 +98,25 @@ public class ConsultasDePaginado {
                 + " WHERE (detallevta.Fecha BETWEEN '" + desde + "' AND '" + hasta + "') GROUP BY detallevta.idventa_idproducto  ";
         return SQLLL;
     }
-
+//paginado movimiento table
     public String movimientoTbl() {
         SQLLL = "SELECT count(*) AS total FROM detallevta";
 
         return SQLLL;
     }
-
+//Paginado filtro tabla stock
+    public String filCategoria(JList cate){
+        int id =cate.getSelectedIndex()+1;
+            if(id != 0 ){
+                
+                
+                SQLLL= "SELECT DISTINCT count(*) AS total FROM productos INNER JOIN categoria_productos ON productos.id_categoria = categoria_productos.id_categoria WHERE productos.id_categoria = '" + id + "' ";
+                
+                return SQLLL;
+            }
+       
+   return SQLLL;
+    }
     //sql de busqueda por usuario en la pestaña movimiento de ventas !
     public String buscarPorUsuarioMovimiento(String user) {
         SQLLL = "SELECT DISTINCT count(*) AS total "

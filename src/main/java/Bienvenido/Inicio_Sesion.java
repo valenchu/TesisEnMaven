@@ -34,9 +34,8 @@ public class Inicio_Sesion extends javax.swing.JFrame {
         pass = new javax.swing.JPasswordField();
         bott1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         bott2 = new javax.swing.JButton();
+        jocLabel1 = new com.xzq.osc.JocLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inicio de Sesión");
@@ -46,24 +45,29 @@ public class Inicio_Sesion extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(600, 500));
 
-        jPanel1.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(600, 500));
         jPanel1.setPreferredSize(new java.awt.Dimension(600, 500));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setBackground(new java.awt.Color(204, 204, 204));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/usuario.png"))); // NOI18N
         jLabel1.setText(" Usuario : ");
         jLabel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 90, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 110, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clave.png"))); // NOI18N
         jLabel2.setText(" Contraseña : ");
         jLabel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 90, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 110, 30));
 
+        user.setToolTipText("Indistinto MAYUSCULAS de minusculas");
+        user.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        user.setSelectionColor(java.awt.SystemColor.activeCaption);
         user.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 userKeyTyped(evt);
@@ -71,6 +75,9 @@ public class Inicio_Sesion extends javax.swing.JFrame {
         });
         jPanel1.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 200, 30));
 
+        pass.setToolTipText("Indistinto MAYUSCULAS de minusculas");
+        pass.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pass.setSelectionColor(java.awt.SystemColor.activeCaption);
         pass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 passKeyTyped(evt);
@@ -78,7 +85,10 @@ public class Inicio_Sesion extends javax.swing.JFrame {
         });
         jPanel1.add(pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 200, 30));
 
+        bott1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/comprobar (1).png"))); // NOI18N
         bott1.setText("Aceptar");
+        bott1.setDoubleBuffered(true);
+        bott1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         bott1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 bott1FocusGained(evt);
@@ -102,22 +112,18 @@ public class Inicio_Sesion extends javax.swing.JFrame {
                 bott1KeyPressed(evt);
             }
         });
-        jPanel1.add(bott1, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 217, -1, -1));
+        jPanel1.add(bott1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, 100, 30));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 11)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel3.setText("ATENCIÓN: SE ADMITEN SOLAMENTE LETRAS Y NUMEROS EN LOS CAMPOS USER Y PASSWORD!!");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 30));
+        jLabel3.setText("ATENCIÓN: SE ADMITEN SOLAMENTE LETRAS Y NUMEROS EN LOS CAMPOS USER Y CONTRASEÑA!!");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 580, 30));
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 204));
-        jLabel5.setText("* Indistinto mayusculas de minusculas");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, -1, -1));
-
-        jLabel6.setForeground(new java.awt.Color(0, 0, 204));
-        jLabel6.setText("* Indistinto mayusculas de minusculas");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, -1, -1));
-
+        bott2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cruzar (1).png"))); // NOI18N
         bott2.setText("Cerrar");
+        bott2.setDoubleBuffered(true);
+        bott2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bott2.setPreferredSize(new java.awt.Dimension(99, 33));
         bott2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 bott2FocusGained(evt);
@@ -141,7 +147,10 @@ public class Inicio_Sesion extends javax.swing.JFrame {
                 bott2KeyPressed(evt);
             }
         });
-        jPanel1.add(bott2, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 217, -1, -1));
+        jPanel1.add(bott2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 100, 30));
+
+        jocLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo58x125.png"))); // NOI18N
+        jPanel1.add(jocLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 100, 150));
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -296,9 +305,8 @@ public class Inicio_Sesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private com.xzq.osc.JocLabel jocLabel1;
     private javax.swing.JPasswordField pass;
     private javax.swing.JTextField user;
     // End of variables declaration//GEN-END:variables

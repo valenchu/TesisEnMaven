@@ -79,7 +79,7 @@ public class ImprimirPedido extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(100, 183, 100));
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(650, 350));
         jPanel1.setPreferredSize(new java.awt.Dimension(650, 350));
         jPanel1.addAncestorListener(new javax.swing.event.AncestorListener() {

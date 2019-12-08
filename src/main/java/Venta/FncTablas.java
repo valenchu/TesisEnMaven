@@ -44,11 +44,13 @@ public class FncTablas extends Frame {
     }
 //Elimina filas tabla ventas
 
-    public void eliminarfilas(JTable tblVenta, JTextField txtTotal) {
+    public void eliminarfilas(JTable tblVenta, JTextField txtTotal, JTextField txtSubTotal) {
         DefaultTableModel mo = (DefaultTableModel) tblVenta.getModel();
         Double restarImporte = 0.0;
         Double totalTabla = parseDouble(txtTotal.getText());
+        Double subtotal = parseDouble(txtSubTotal.getText());
         totalTabla = (double) round(totalTabla * 100) / 100;
+        subtotal = (double) round(subtotal * 100) / 100;
         InsertarProductos in = new InsertarProductos();
         double tores = totalreset;
         int filaSeleccionada = tblVenta.getSelectedRow();
@@ -61,19 +63,23 @@ public class FncTablas extends Frame {
             tblVenta.clearSelection();
             //instancio la tabla de nuevo
             tblVenta.setModel(mo);
-            //le asigno el valor de resta a total en la tabla y a total reset para los descuentos
+            //le asigno el valor de resta a total y subtotal en la tabla y a total reset para los descuentos
             totalTabla = (totalTabla - restarImporte);
+            subtotal = (subtotal - restarImporte);
             tores = (tores - restarImporte);
             //Uso (double) Math.round(variable aca * 100)/100; Para redondear y dejar 2 decimales
             totalreset = (double) round(tores * 100) / 100;
             totalTabla = (double) round(totalTabla * 100) / 100;
+            subtotal = (double) round(subtotal * 100) / 100;
             txtTotal.setText(Double.toString(totalTabla));
+            txtSubTotal.setText(Double.toString(subtotal));
         } else {
             showMessageDialog(null, "Seleccione una fila a eliminar", "Error", ERROR_MESSAGE);
         }
         int filastabla = tblVenta.getRowCount();
         if (filastabla == 0) {
             txtTotal.setText(Double.toString(0.0));
+            txtSubTotal.setText(Double.toString(0.0));
             totalreset = 0.0;
         }
 
@@ -104,25 +110,25 @@ public class FncTablas extends Frame {
         }
 
     }
-        public void limpiarTabla2(JTable tabla, JTextField txtTotal, JTextField subTotal, JTextField pago, JTextField vuelto, JComboBox cmb) {
-       
-            //Limpio la tabla
-            ModificacionJtable md = new ModificacionJtable();
-            md.limpiarTabla(tabla);
-            //Reseteo todo de la tabla venta
-            String to = txtTotal.getText();
-            String subTo = subTotal.getText();
-            subTo = "0.0";
-            to = "0.0";
-            txtTotal.setText(to);
-            subTotal.setText(to);
-            totalreset = 0.0;
-            cmb.setSelectedIndex(0);
-            pago.setText(null);
-            vuelto.setText(null);
+
+    public void limpiarTabla2(JTable tabla, JTextField txtTotal, JTextField subTotal, JTextField pago, JTextField vuelto, JComboBox cmb) {
+
+        //Limpio la tabla
+        ModificacionJtable md = new ModificacionJtable();
+        md.limpiarTabla(tabla);
+        //Reseteo todo de la tabla venta
+        String to = txtTotal.getText();
+        String subTo = subTotal.getText();
+        subTo = "0.0";
+        to = "0.0";
+        txtTotal.setText(to);
+        subTotal.setText(to);
+        totalreset = 0.0;
+        cmb.setSelectedIndex(0);
+        pago.setText(null);
+        vuelto.setText(null);
 
     }
-
 
     //Paso datos a tablaventas
     public void pasarDatos(JTable tbl) {
