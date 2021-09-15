@@ -204,7 +204,7 @@
 
             <artifactId>poi</artifactId>
 
-            <version>3.16-beta2</version>
+            <version>3.17</version>
             <type>jar</type>
         </dependency>
 
