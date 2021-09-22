@@ -13,5 +13,5 @@ La tesis final , para recibirme
 ## MenuAPP
 
 ***
-![control](https://github.com/valenchu/TesisEnMaven/blob/master/Instaladores/DatosTeoricosTesis/Logo%20Imagenes/Pantallas/AppEscritorioPantallas/registroUser.jpg)
+![menu](https://github.com/valenchu/TesisEnMaven/blob/master/Instaladores/DatosTeoricosTesis/Logo%20Imagenes/Pantallas/AppEscritorioPantallas/Menu.jpg)
 ## [Todas las tomas de pantalla aca](https://github.com/valenchu/TesisEnMaven/tree/master/Instaladores/DatosTeoricosTesis/Logo%20Imagenes/Pantallas/AppEscritorioPantallas)
